@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gardian – Your Website's Silent Protector</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 650px;
+      width: 100%;
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 32px;
+      color: #2c3e50;
+    }
+
+    .tagline {
+      text-align: center;
+      color: #555;
+      font-size: 18px;
+      margin-bottom: 35px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    input[type="url"], input[type="email"] {
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      width: 100%;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #2c3e50;
+      outline: none;
+      box-shadow: 0 0 6px rgba(44,62,80,0.2);
+    }
+
+    label {
+      font-size: 15px;
+      color: #333;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 14px;
+      background: #2c3e50;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    button:hover { background: #1a242f; }
+
+    .success-message {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+
+    .features {
+      margin-top: 40px;
+    }
+
+    .features h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      font-size: 24px;
+    }
+
+    .features ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .features ul li {
+      margin: 12px 0;
+      padding-left: 25px;
+      position: relative;
+      font-size: 16px;
+      color: #444;
+    }
+
+    .features ul li::before {
+      content: "✔";
+      color: green;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="Logo.jpg" alt="Gardian Logo" class="logo">
+    <h1>Gardian</h1>
+    <p class="tagline">Your website's silent protector.</p>
+
+    <!-- Form -->
+    <form id="gardianForm">
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      <input type="url" id="siteUrl" name="siteUrl" placeholder="Enter your website URL" required>
+
+      <label>
+        <input type="checkbox" id="consentCheckbox" name="consentGiven" required>
+        I confirm I own/manage this site and consent to a passive security scan.
+      </label>
+
+      <button type="submit">🔍 Scan My Website</button>
+    </form>
+
+    <!-- Success -->
+    <p class="success-message" id="successMessage">✅ Thank you! Your scan has started. You'll receive your report shortly.</p>
+
+    <!-- Features -->
+    <div class="features">
+      <h2>What you get in your free report</h2>
+      <ul>
+        <li>Instant security vulnerabilities check</li>
+        <li>SEO and performance insights</li>
+        <li>Simple steps to fix key issues</li>
+        <li>First scan is always free</li>
+      </ul>
+    </div>
+
+    <div class="footer">&copy; 2025 Gardian. All rights reserved.</div>
+  </div>
+
+  <script>
+  const form = document.getElementById("gardianForm");
+  const successMessage = document.getElementById("successMessage");
+
+  const loadingOverlay = document.createElement("div");
+  loadingOverlay.style.position = "fixed";
+  loadingOverlay.style.top = "0";
+  loadingOverlay.style.left = "0";
+  loadingOverlay.style.width = "100%";
+  loadingOverlay.style.height = "100%";
+  loadingOverlay.style.background = "rgba(255,255,255,0.8)";
+  loadingOverlay.style.display = "flex";
+  loadingOverlay.style.justifyContent = "center";
+  loadingOverlay.style.alignItems = "center";
+  loadingOverlay.style.fontSize = "24px";
+  loadingOverlay.style.color = "#2c3e50";
+  loadingOverlay.style.zIndex = "9999";
+  loadingOverlay.innerText = "🔍 Scanning your site...";
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+  const formData = {
+    email: document.getElementById("email").value,
+    siteUrl: document.getElementById("siteUrl").value,
+    consentGiven: document.getElementById("consentCheckbox").checked
+  };
+
+    document.body.appendChild(loadingOverlay); // Show animation
+
+    try {
+      const res = await fetch("https://gardian-backend-r9hy.onrender.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await res.json();
+      document.body.removeChild(loadingOverlay); // Hide animation
+
+      if (res.ok) {
+        form.style.display = "none";
+        successMessage.style.display = "block";
+      } else {
+        alert(result.error || "Something went wrong.");
+      }
+    } catch (err) {
+      document.body.removeChild(loadingOverlay); // Hide animation
+      alert("Failed to connect to server.");
+      console.error(err);
+    }
+  });
+</script>
+</body>
+</html>
