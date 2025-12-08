@@ -103,12 +103,16 @@
       color: green;
     }
 
-    .spam-note {
+    .info-box {
       display: none;
-      text-align: center;
-      margin-top: 10px;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #fff8e1;
+      color: #444;
       font-size: 14px;
-      color: #555;
+      text-align: center;
+      border: 1px solid #f0d98c;
     }
 
     .features {
@@ -171,8 +175,13 @@
     </form>
 
     <!-- Success -->
-    <p class="success-message" id="successMessage">✅ Thank you! Your scan has started. You'll receive your report shortly.</p>
-    <p class="spam-note" id="spamNote">📩 If you don’t see your report in your inbox within a few minutes, please check your Spam or Promotions folder and mark it as 'Not Spam'.</p>
+    <p class="success-message" id="successMessage">
+      ✅ Thank you! Your scan has started. You'll receive your report shortly.
+    </p>
+    <div class="info-box" id="infoBox">
+      ⏳ Scans may take a few minutes while our security engine warms up.<br>
+      📩 If you don’t see your report in your inbox, please check your Spam or Promotions folder and mark it as 'Not Spam'.
+    </div>
 
     <!-- Features -->
     <div class="features">
@@ -191,7 +200,7 @@
   <script>
   const form = document.getElementById("gardianForm");
   const successMessage = document.getElementById("successMessage");
-  const spamNote = document.getElementById("spamNote");
+  const infoBox = document.getElementById("infoBox");
 
   const loadingOverlay = document.createElement("div");
   loadingOverlay.style.position = "fixed";
@@ -232,7 +241,7 @@
       if (res.ok) {
         form.style.display = "none";
         successMessage.style.display = "block";
-        spamNote.style.display = "block"; // ✅ Show spam reminder
+        infoBox.style.display = "block"; // ✅ Show combined info box
       } else {
         alert(result.error || "Something went wrong.");
       }
