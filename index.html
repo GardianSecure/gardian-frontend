@@ -179,7 +179,6 @@
       ✅ Thank you! Your scan has started. You'll receive your report shortly.
     </p>
     <div class="info-box" id="infoBox">
-      ⏳ Scans may take a few minutes while our security engine warms up.<br>
       📩 If you don’t see your report in your inbox, please check your Spam or Promotions folder and mark it as 'Not Spam'.
     </div>
 
@@ -210,12 +209,16 @@
   loadingOverlay.style.height = "100%";
   loadingOverlay.style.background = "rgba(255,255,255,0.8)";
   loadingOverlay.style.display = "flex";
+  loadingOverlay.style.flexDirection = "column";   // allow multi-line
   loadingOverlay.style.justifyContent = "center";
   loadingOverlay.style.alignItems = "center";
   loadingOverlay.style.fontSize = "24px";
   loadingOverlay.style.color = "#2c3e50";
   loadingOverlay.style.zIndex = "9999";
-  loadingOverlay.innerText = "🔍 Scanning your site...";
+  loadingOverlay.innerHTML = `
+  🔍 Scanning your site...<br>
+  ⏳ This may take a few minutes while our security engine warms up.
+`;
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -254,3 +257,4 @@
   </script>
 </body>
 </html>
+
