@@ -103,6 +103,14 @@
       color: green;
     }
 
+    .spam-note {
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
     .features {
       margin-top: 40px;
     }
@@ -164,6 +172,7 @@
 
     <!-- Success -->
     <p class="success-message" id="successMessage">✅ Thank you! Your scan has started. You'll receive your report shortly.</p>
+    <p class="spam-note" id="spamNote">📩 If you don’t see your report in your inbox within a few minutes, please check your Spam or Promotions folder and mark it as 'Not Spam'.</p>
 
     <!-- Features -->
     <div class="features">
@@ -182,6 +191,7 @@
   <script>
   const form = document.getElementById("gardianForm");
   const successMessage = document.getElementById("successMessage");
+  const spamNote = document.getElementById("spamNote");
 
   const loadingOverlay = document.createElement("div");
   loadingOverlay.style.position = "fixed";
@@ -201,11 +211,11 @@
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-  const formData = {
-    email: document.getElementById("email").value,
-    siteUrl: document.getElementById("siteUrl").value,
-    consentGiven: document.getElementById("consentCheckbox").checked
-  };
+    const formData = {
+      email: document.getElementById("email").value,
+      siteUrl: document.getElementById("siteUrl").value,
+      consentGiven: document.getElementById("consentCheckbox").checked
+    };
 
     document.body.appendChild(loadingOverlay); // Show animation
 
@@ -222,6 +232,7 @@
       if (res.ok) {
         form.style.display = "none";
         successMessage.style.display = "block";
+        spamNote.style.display = "block"; // ✅ Show spam reminder
       } else {
         alert(result.error || "Something went wrong.");
       }
@@ -231,7 +242,6 @@
       console.error(err);
     }
   });
-</script>
+  </script>
 </body>
 </html>
-
