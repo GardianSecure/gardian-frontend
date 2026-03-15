@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/jpeg" href="Logo.jpg" />
-  <title>GardianX – Your Website's Silent Protector</title>
+  <title>GardianX – Website Security Made Simple</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -153,13 +153,20 @@
       color: #aaa;
       text-align: center;
     }
+
+    .about {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <img src="Logo.jpg" alt="Gardian Logo" class="logo">
     <h1>GardianX</h1>
-    <p class="tagline">Your website's silent protector.</p>
+    <p class="tagline">Website security made simple.</p>
 
     <!-- Form -->
     <form id="gardianForm">
@@ -188,9 +195,16 @@
       <ul>
         <li>Instant security vulnerabilities check</li>
         <li>SEO and performance insights</li>
-        <li>Simple steps to fix key issues</li>
+        <li>Simple steps explained in plain language</li>
+        <li>Checks for common OWASP Top 10 risks</li>
         <li>First scan is always free</li>
       </ul>
+    </div>
+
+    <!-- About -->
+    <div class="about">
+      🔒 GardianX helps you spot common issues and explains them in simple terms.  
+      It’s your first line of defense, not a full audit.
     </div>
 
     <div class="footer">&copy; 2026 GardianX. All rights reserved.</div>
@@ -209,7 +223,7 @@
   loadingOverlay.style.height = "100%";
   loadingOverlay.style.background = "rgba(255,255,255,0.8)";
   loadingOverlay.style.display = "flex";
-  loadingOverlay.style.flexDirection = "column";   // allow multi-line
+  loadingOverlay.style.flexDirection = "column";
   loadingOverlay.style.justifyContent = "center";
   loadingOverlay.style.alignItems = "center";
   loadingOverlay.style.fontSize = "24px";
@@ -244,7 +258,7 @@
       if (res.ok) {
         form.style.display = "none";
         successMessage.style.display = "block";
-        infoBox.style.display = "block"; // ✅ Show combined info box
+        infoBox.style.display = "block";
       } else {
         alert(result.error || "Something went wrong.");
       }
@@ -257,8 +271,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
