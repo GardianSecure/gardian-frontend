@@ -304,17 +304,36 @@
       scanForm.style.display = "flex";
     });
 
-    // Handle scan form submission
-    scanForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      loadingOverlay.style.display = "flex";
-      setTimeout(() => {
-        loadingOverlay.style.display = "none";
-        successMessage.style.display = "block";
-        infoBox.style.display = "block";
-        registerForm.style.display = "flex"; // show register after scan
-      }, 3000); // simulate scan duration
+    // Handle scan form submission (real backend call)
+scanForm.addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const siteUrl = document.getElementById("siteUrl").value;
+  const consentGiven = document.getElementById("consentCheckbox").checked;
+
+  loadingOverlay.style.display = "flex";
+
+  try {
+    const response = await fetch("http://localhost:10000/scan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, siteUrl, consentGiven })
     });
-  </script>
+
+    const data = await response.json();
+    console.log("Scan result:", data);
+
+    loadingOverlay.style.display = "none";
+    successMessage.style.display = "block";
+    infoBox.style.display = "block";
+    registerForm.style.display = "flex"; // show register after scan
+  } catch (err) {
+    loadingOverlay.style.display = "none";
+    alert("❌ Scan failed. Please try again.");
+    console.error(err);
+  }
+});
+</script>
 </body>
 </html>
