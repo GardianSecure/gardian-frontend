@@ -305,35 +305,38 @@
     });
 
     // Handle scan form submission (real backend call)
-scanForm.addEventListener("submit", async function(e) {
-  e.preventDefault();
+    scanForm.addEventListener("submit", async function(e) {
+      e.preventDefault();
 
-  const email = document.getElementById("email").value;
-  const siteUrl = document.getElementById("siteUrl").value;
-  const consentGiven = document.getElementById("consentCheckbox").checked;
+      const email = document.getElementById("email").value;
+      const siteUrl = document.getElementById("siteUrl").value;
+      const consentGiven = document.getElementById("consentCheckbox").checked;
+      loadingOverlay.style.display = "flex";
 
-  loadingOverlay.style.display = "flex";
+      try {
+        const response = await fetch("https://gardian-backend-vukx.onrender.com/scan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, siteUrl, tier: "Free", consentGiven })
+        });
 
-  try {
-    const response = await fetch("http://localhost:10000/scan", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, siteUrl, consentGiven })
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Scan result:", data);
+
+          loadingOverlay.style.display = "none";
+          successMessage.style.display = "block";
+          infoBox.style.display = "block";
+          registerForm.style.display = "flex"; // show register after scan
+        } else {
+          throw new Error("Backend error");
+        }
+      } catch (err) {
+        loadingOverlay.style.display = "none";
+        alert("❌ Scan failed. Please try again.");
+        console.error(err);
+      }
     });
-
-    const data = await response.json();
-    console.log("Scan result:", data);
-
-    loadingOverlay.style.display = "none";
-    successMessage.style.display = "block";
-    infoBox.style.display = "block";
-    registerForm.style.display = "flex"; // show register after scan
-  } catch (err) {
-    loadingOverlay.style.display = "none";
-    alert("❌ Scan failed. Please try again.");
-    console.error(err);
-  }
-});
-</script>
+  </script>
 </body>
 </html>
