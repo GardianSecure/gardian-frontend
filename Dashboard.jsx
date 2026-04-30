@@ -6,21 +6,53 @@ import { Pie } from "react-chartjs-2";
 export default function Dashboard() {
   const [submissions, setSubmissions] = useState([]);
 
+  // Load submissions
+  const loadSubmissions = async () => {
+    try {
+      const res = await axios.get("https://gardian-backend-vukx.onrender.com/api/submissions");
+      setSubmissions(res.data);
+    } catch (err) {
+      console.error("❌ Failed to load submissions:", err);
+    }
+  };
+
   useEffect(() => {
-    axios.get("/api/submissions")
-      .then(res => setSubmissions(res.data))
-      .catch(err => console.error("Failed to load submissions:", err));
+    loadSubmissions();
   }, []);
+
+  // Rescan handler
+  const handleRescan = async (id) => {
+    try {
+      await axios.post(`https://gardian-backend-vukx.onrender.com/rescan/${id}`);
+      alert("✅ Rescan complete! Report emailed again.");
+      loadSubmissions();
+    } catch (err) {
+      alert("❌ Rescan failed. Please try again.");
+      console.error(err);
+    }
+  };
+
+  // Upgrade handler
+  const handleUpgrade = async (email) => {
+    try {
+      await axios.post("https://gardian-backend-vukx.onrender.com/upgrade", { email });
+      alert(`✅ ${email} upgraded to Pro!`);
+      loadSubmissions();
+    } catch (err) {
+      alert("❌ Upgrade failed. Please try again.");
+      console.error(err);
+    }
+  };
 
   const chartData = {
     labels: ["High", "Medium", "Low", "Informational"],
     datasets: [
       {
         data: [
-          submissions.reduce((acc, s) => acc + s.summary?.high || 0, 0),
-          submissions.reduce((acc, s) => acc + s.summary?.medium || 0, 0),
-          submissions.reduce((acc, s) => acc + s.summary?.low || 0, 0),
-          submissions.reduce((acc, s) => acc + s.summary?.informational || 0, 0),
+          submissions.reduce((acc, s) => acc + (s.summary?.high || 0), 0),
+          submissions.reduce((acc, s) => acc + (s.summary?.medium || 0), 0),
+          submissions.reduce((acc, s) => acc + (s.summary?.low || 0), 0),
+          submissions.reduce((acc, s) => acc + (s.summary?.informational || 0), 0),
         ],
         backgroundColor: ["#ef4444", "#f59e0b", "#3b82f6", "#9ca3af"],
       },
@@ -60,10 +92,16 @@ export default function Dashboard() {
                 <td className="p-2 border">{s.status}</td>
                 <td className="p-2 border">{new Date(s.timestamp).toLocaleString()}</td>
                 <td className="p-2 border">
-                  <button className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
+                  <button
+                    onClick={() => handleRescan(s.id)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded mr-2"
+                  >
                     Rescan
                   </button>
-                  <button className="bg-green-500 text-white px-3 py-1 rounded">
+                  <button
+                    onClick={() => handleUpgrade(s.email)}
+                    className="bg-green-600 text-white px-3 py-1 rounded"
+                  >
                     Upgrade to Pro
                   </button>
                 </td>
